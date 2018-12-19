@@ -6,6 +6,7 @@
 package Servlets;
 
 import java.io.IOException;
+import static java.lang.System.out;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,26 +64,26 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       processRequest(request, response);
+       //processRequest(request, response);
        
-        //request.getRequestDispatcher("/WEB-INF/Pages/RegisterForm.jsp").forward(request, response);
+       request.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(request, response);
        String first_name = request.getParameter("first_name");
 		String last_name = request.getParameter("last_name");
-		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		String address = request.getParameter("address");
-		String contact = request.getParameter("contact");
+		String email = request.getParameter("email");
+		String contact = request.getParameter("phone");
 		
-		if(first_name.isEmpty() || last_name.isEmpty() || username.isEmpty() || 
-				password.isEmpty() || address.isEmpty() || contact.isEmpty())
+		if(first_name.isEmpty() || last_name.isEmpty() || 
+				password.isEmpty() || email.isEmpty() || contact.isEmpty())
 		{
 			RequestDispatcher req = request.getRequestDispatcher("/WEB-INF/Pages/RegisterForm.jsp");
 			req.include(request, response);
 		}
 		else
 		{
-			//RequestDispatcher req = request.getRequestDispatcher("register_2.jsp");
-			//req.forward(request, response);
+                    RequestDispatcher req = request.getRequestDispatcher("register.jsp");
+                    req.forward(request, response);
+                    
 		}
     }
 
