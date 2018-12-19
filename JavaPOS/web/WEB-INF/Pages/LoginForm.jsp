@@ -15,7 +15,7 @@
         <h1>Login</h1>
         
         <form action="Login" method="post">  
-            Name:<input type="text" name="username"/><br/><br/>  
+            Name:<input type="text" name="user"/><br/><br/>  
             Password:<input type="password" name="userpass"/><br/><br/>  
             <input type="submit" value="login"/>  
         </form> 

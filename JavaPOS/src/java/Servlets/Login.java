@@ -59,32 +59,22 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // processRequest(request, response);
+        request.getRequestDispatcher("/WEB-INF/Pages/LoginForm.jsp").forward(request, response);
     }
 
    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // processRequest(request, response);
         
          response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        String email = request.getParameter("email");
-        String pass = request.getParameter("pass");
-        
-//        if(ValidateLogin.checkUser(email, pass))
-//        {
-//            RequestDispatcher rs = request.getRequestDispatcher("Welcome");
-//            rs.forward(request, response);
-//        }
-//        else
-//        {
-//           out.println("Username or Password incorrect");
-//           RequestDispatcher rs = request.getRequestDispatcher("index.jsp");
-//           rs.include(request, response);
-//        }
+         
+        request.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(request, response);
+       
     }
 
     /**

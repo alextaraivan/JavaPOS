@@ -4,7 +4,7 @@
     Author     : Romelia Milascon
 --%>
 
-<nav>
+
     
  <ul>
   <li><a href="${pageContext.request.contextPath}/Login">Login</a></li>
@@ -13,4 +13,3 @@
   
 </ul>
     
-</nav>

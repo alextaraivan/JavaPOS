@@ -12,7 +12,20 @@
         <title>POS</title>
     </head>
     <body>
+        <header>
+        <nav>
         <%@include file="WEB-INF/Pages/Meniu.jsp" %>
-    </div>
+        </nav>
+        
+        </header>
+        
+        <div>
+            <p>Aici punem poze, text orice</p>
+            
+        </div>
+        
+        <footer>
+            <%@include file="WEB-INF/Pages/Footer.jsp" %>
+        </footer>
     </body>
 </html>
