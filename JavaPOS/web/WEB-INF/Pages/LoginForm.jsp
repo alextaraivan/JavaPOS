@@ -8,16 +8,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <%@include file="external.jsp" %>
         <title>Login</title>
     </head>
     <body>
-        <h1>Login</h1>
-        
-        <form action="Login" method="post">  
-            Name:<input type="text" name="user"/><br/><br/>  
-            Password:<input type="password" name="userpass"/><br/><br/>  
-            <input type="submit" value="login"/>  
-        </form> 
-    </body>
-</html>
+        <%@include file="Meniu.jsp" %>
+            <form class="w-60 p-3 text-center">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Username</label>
+                  <input type="text" class="form-control" name="user" placeholder="Ex:PopaIonel"/>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Parola</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Ex:123">
+                </div>
+                <button type="submit" value="login" class="btn btn-primary">Login</button>
+            </form>
+     <%@include file="Footer.jsp" %>

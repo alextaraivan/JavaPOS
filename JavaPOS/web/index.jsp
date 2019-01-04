@@ -8,24 +8,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <%@include file="WEB-INF/Pages/external.jsp" %>
         <title>POS</title>
     </head>
     <body>
         <header>
-        <nav>
-        <%@include file="WEB-INF/Pages/Meniu.jsp" %>
-        </nav>
-        
+            <%@include file="WEB-INF/Pages/Meniu.jsp" %>
         </header>
-        
-        <div>
-            <p>Aici punem poze, text orice</p>
-            
+        <div class="text-center">
+            <img  class="banner_dimension" src="img/banner.jpg" alt="banner">
         </div>
-        
-        <footer>
-            <%@include file="WEB-INF/Pages/Footer.jsp" %>
-        </footer>
-    </body>
-</html>
+<%@include file="WEB-INF/Pages/Footer.jsp" %>
+ 

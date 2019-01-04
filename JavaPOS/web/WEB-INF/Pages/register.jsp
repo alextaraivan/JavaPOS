@@ -1,13 +1,11 @@
 <%@ page import="java.sql.*" %>
 
 
-<HTML>
-    <HEAD>
-        <TITLE>Insert</TITLE>
-    </HEAD>
-
-    <BODY>
-
+<html>
+    <head>
+        <title>Insert</title>
+    </head>
+    <body>
         <% 
             Connection connection = DriverManager.getConnection(
                 "jdbc:derby://localhost:1527/Store", "Lidi", "1234");
@@ -20,10 +18,5 @@
             String phone=request.getParameter("phone");
             int no=Integer.parseInt(phone);    
             statement.executeUpdate("insert into users(username,email,phone,password,position)values ('"+user+"','"+email+"',"+no+",'"+pass+"','CASHIER')") ; 
-            
-
         %>
-
-      
-    </BODY>
-</HTML>
+<%@include file="WEB-INF/Pages/Footer.jsp" %>
