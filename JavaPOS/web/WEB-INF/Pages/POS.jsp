@@ -9,19 +9,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@include file="external.jsp" %>
         <title>POS</title>
     </head>
     <body>
         <header>
-            
-            //data ,nume casier
+             <%@include file="MeniuLogat.jsp" %>
         </header>
         <div id="content">
-            //aici vine interfata pos-ului
+            
         </div>
         
-        <footer>
-            //puneti voi ceva
-        </footer>
     </body>
 </html>

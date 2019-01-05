@@ -6,7 +6,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,27 +16,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Romelia Milascon
  */
 @Entity
-@Table(name = "USERS")
+@Table(name = "USER1")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
-    , @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id")
-    , @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username")
-    , @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email")
-    , @NamedQuery(name = "Users.findByPhone", query = "SELECT u FROM Users u WHERE u.phone = :phone")
-    , @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password")
-    , @NamedQuery(name = "Users.findByPosition", query = "SELECT u FROM Users u WHERE u.position = :position")})
-public class Users implements Serializable {
+    @NamedQuery(name = "User1.findAll", query = "SELECT u FROM User1 u")
+    , @NamedQuery(name = "User1.findById", query = "SELECT u FROM User1 u WHERE u.id = :id")
+    , @NamedQuery(name = "User1.findByUsername", query = "SELECT u FROM User1 u WHERE u.username = :username")
+    , @NamedQuery(name = "User1.findByEmail", query = "SELECT u FROM User1 u WHERE u.email = :email")
+    , @NamedQuery(name = "User1.findByPhone", query = "SELECT u FROM User1 u WHERE u.phone = :phone")
+    , @NamedQuery(name = "User1.findByPassword", query = "SELECT u FROM User1 u WHERE u.password = :password")
+    , @NamedQuery(name = "User1.findByPosition", query = "SELECT u FROM User1 u WHERE u.position = :position")
+    , @NamedQuery(name="User1.findByNameAndPass", query="SELECT u FROM User1 u WHERE u.username = :username and u.password=:password")})
+public class User1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -67,15 +72,17 @@ public class Users implements Serializable {
     @Size(min = 1, max = 32)
     @Column(name = "POSITION")
     private String position;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cashierId")
+    private Collection<Sale> saleCollection;
 
-    public Users() {
+    public User1() {
     }
 
-    public Users(Integer id) {
+    public User1(Integer id) {
         this.id = id;
     }
 
-    public Users(Integer id, String username, String email, int phone, String password, String position) {
+    public User1(Integer id, String username, String email, int phone, String password, String position) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -132,6 +139,15 @@ public class Users implements Serializable {
         this.position = position;
     }
 
+    @XmlTransient
+    public Collection<Sale> getSaleCollection() {
+        return saleCollection;
+    }
+
+    public void setSaleCollection(Collection<Sale> saleCollection) {
+        this.saleCollection = saleCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -142,10 +158,10 @@ public class Users implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Users)) {
+        if (!(object instanceof User1)) {
             return false;
         }
-        Users other = (Users) object;
+        User1 other = (User1) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -154,7 +170,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "PosClasses.Users[ id=" + id + " ]";
+        return "entity.User1[ id=" + id + " ]";
     }
     
 }
