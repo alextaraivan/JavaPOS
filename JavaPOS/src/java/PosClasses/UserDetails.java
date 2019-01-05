@@ -19,14 +19,25 @@ public class UserDetails implements java.io.Serializable {
     
     private String position;
     
+    private int phone;
+    
     private String password;
 
-    public UserDetails(Integer id, String username, String email, String position,String password) {
+    public UserDetails(Integer id, String username, String email,int phone, String position,String password) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.phone=phone;
         this.position = position;
         this.password=password;
+    }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
     }
 
     public String getPassword() {

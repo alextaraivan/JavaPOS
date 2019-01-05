@@ -16,8 +16,24 @@
         <header>
              <%@include file="MeniuLogat.jsp" %>
         </header>
+        
         <div id="content">
+            <% if (request.getSession().getAttribute("userRole").equals("admin"))
+            { %> 
+             <p>Content for admin</p>
+             <div id="adminPage"> 
+                <input type="button" onclick="location.href='${pageContext.request.contextPath}/Users'" value="Users" />
+            </div>        
+             <% } 
+                else { 
+             %>
             
+            <p>Content POS casier</p>
+             <div id="cashierPage"> 
+                <input type="button" onclick="location.href='${pageContext.request.contextPath}/NewSale';" value="New Sale" />
+                <input type="button" onclick="location.href='${pageContext.request.contextPath}/NewReturn';" value="New Return" />
+            </div>
+          <% } %>
         </div>
         
     </body>

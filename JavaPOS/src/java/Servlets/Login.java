@@ -78,18 +78,17 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         
-        
-       // response.setContentType("text/html;charset=UTF-8");
-        //PrintWriter out = response.getWriter();
-        
         String user = request.getParameter("user");
         String pass=request.getParameter("userpass");
          
         List<User1> u=userBean.findUser(user,pass);
         
-         if (u != null) {
+         if (u.isEmpty() != true) {
             request.getSession().setAttribute("user", user);
-            //response.sendRedirect("/Pages/POS.jsp");
+            if(u.get(0).getPosition().equals("ADMIN"))
+                request.getSession().setAttribute("userRole","admin");
+            else
+                request.getSession().setAttribute("userRole","cashier");
            
              request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
         }
