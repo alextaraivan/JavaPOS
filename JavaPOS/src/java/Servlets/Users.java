@@ -6,7 +6,11 @@
 package Servlets;
 
 import Ejb.UserBean;
+import PosClasses.UserDetails;
 import java.io.IOException;
+import java.io.PrintWriter;
+import static java.lang.System.out;
+import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Romelia Milascon
  */
-@WebServlet(name = "Register", urlPatterns = {"/Register"})
-public class Register extends HttpServlet {
+@WebServlet(name = "Users", urlPatterns = {"/Users"})
+public class Users extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,14 +34,25 @@ public class Register extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Inject
-    UserBean userBean;
     
+     @Inject
+    private UserBean userBean;
+     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     
-        
-
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Users</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet Users at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -52,8 +67,12 @@ public class Register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        request.getRequestDispatcher("/WEB-INF/Pages/RegisterForm.jsp").forward(request, response);
+        
+        List<UserDetails> users = userBean.getAllUsers();
+        request.setAttribute("users", users);
+        
+        request.getRequestDispatcher("/WEB-INF/Pages/users.jsp").forward(request, response);
+        
     }
 
     /**
@@ -67,14 +86,7 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
-                String username = request.getParameter("first_name")+" "+request.getParameter("last_name");
-		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		String contact = request.getParameter("phone");
-                int phone=Integer.parseInt(contact); 
-         userBean.createUser(username,email,phone,password,"CASHIER"); 
-         response.sendRedirect(request.getContextPath()+"/Users");
+        processRequest(request, response);
     }
 
     /**

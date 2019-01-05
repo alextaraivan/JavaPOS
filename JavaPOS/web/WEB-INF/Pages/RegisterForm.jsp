@@ -9,10 +9,10 @@
 <html>
     <head>
          <%@include file="external.jsp" %>
-        <title>Login</title>
+        <title>Add cashier</title>
     </head>
     <body>
-        <%@include file="Meniu.jsp" %>
+        <%@include file="MeniuLogat.jsp" %>
   
         <form class="w-60 p-3 text-center" action="Register" method="post">
             <div class="form-group">
@@ -38,16 +38,5 @@
             <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
         </form>
         <%@include file="Footer.jsp" %>
- 
-
-
-
-
-
-
-
-
-
-
-
-    <%@include file="Footer.jsp" %>
+    </body>
+</html>   

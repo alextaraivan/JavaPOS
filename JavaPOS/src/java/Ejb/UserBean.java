@@ -31,12 +31,14 @@ public class UserBean {
    @PersistenceContext
    private EntityManager em;
  
-    public void createUser(String username, String email, String passwordSha256, String position) {
+    public void createUser(String username, String email,int phone, String password, String position) {
         User1 user = new User1();
         user.setUsername(username);
         user.setEmail(email);
-        user.setPassword(passwordSha256);
+        user.setPhone(phone);
+        user.setPassword(password);
         user.setPosition(position);
+        
         
         em.persist(user);
     }
@@ -48,6 +50,12 @@ public class UserBean {
         userQuery.setParameter("password",password);
         return userQuery.getResultList();
     }
+    
+    public UserDetails findById(Integer userId) {
+        User1 user = em.find(User1.class, userId);
+        return new UserDetails(user.getId(),user.getUsername(), user.getEmail(), user.getPhone(),user.getPosition(),user.getPassword());
+    }
+    
     public List<UserDetails> getAllUsers() {
         LOG.info("getAllUsers");
         
@@ -66,11 +74,23 @@ public class UserBean {
             UserDetails userDetails = new UserDetails(user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getPosition(),
+                user.getPhone(),  
+                user.getPosition(),     
                 user.getPassword());
             detailsList.add(userDetails);
         }
         return detailsList;
+    }
+
+    public void updateUser(int userId, String username, String email, int phone, String position) {
+        
+        LOG.info("updateUser");
+        User1 user = em.find(User1.class, userId);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPosition(position);
+        
     }
    
 }

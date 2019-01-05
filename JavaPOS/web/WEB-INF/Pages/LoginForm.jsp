@@ -16,7 +16,7 @@
             <form class="w-60 p-3 text-center" method="POST" action="Login">
                 <div class="form-group">
                   <label for="exampleInputEmail1">Username</label>
-                  <input type="text" class="form-control" name="user" placeholder="Ex:Popa Ionel" required/>
+                  <input type="text" class="form-control" name="user" placeholder="Ex:Ionel Popa" required/>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Parola</label>
