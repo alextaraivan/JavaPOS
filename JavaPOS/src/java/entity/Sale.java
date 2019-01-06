@@ -5,9 +5,12 @@
  */
 package entity;
 
+import entity.Solditems;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,11 +18,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,6 +39,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Sale.findByDate", query = "SELECT s FROM Sale s WHERE s.date = :date")
     , @NamedQuery(name = "Sale.findByCash", query = "SELECT s FROM Sale s WHERE s.cash = :cash")})
 public class Sale implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "saleId")
+    private Collection<Solditems> solditemsCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -131,6 +139,15 @@ public class Sale implements Serializable {
     @Override
     public String toString() {
         return "entity.Sale[ saleId=" + saleId + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Solditems> getSolditemsCollection() {
+        return solditemsCollection;
+    }
+
+    public void setSolditemsCollection(Collection<Solditems> solditemsCollection) {
+        this.solditemsCollection = solditemsCollection;
     }
     
 }
