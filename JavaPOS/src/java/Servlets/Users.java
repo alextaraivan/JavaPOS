@@ -9,7 +9,7 @@ import Ejb.UserBean;
 import PosClasses.UserDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.System.out;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -86,7 +86,19 @@ public class Users extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        
+        String[] userIdsAsString = request.getParameterValues("user_ids");
+        if (userIdsAsString != null) {
+            List<Integer> userIds = new ArrayList<>();
+            for (String userIdAsString : userIdsAsString) {
+                userIds.add(Integer.parseInt(userIdAsString));
+            }
+            userBean.deleteUsersByIds(userIds);
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/Users");
+        
     }
 
     /**

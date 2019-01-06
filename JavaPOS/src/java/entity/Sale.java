@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Sale.findAll", query = "SELECT s FROM Sale s")
     , @NamedQuery(name = "Sale.findBySaleId", query = "SELECT s FROM Sale s WHERE s.saleId = :saleId")
     , @NamedQuery(name = "Sale.findByDate", query = "SELECT s FROM Sale s WHERE s.date = :date")
-    , @NamedQuery(name = "Sale.findByAmount", query = "SELECT s FROM Sale s WHERE s.amount = :amount")})
+    , @NamedQuery(name = "Sale.findByCash", query = "SELECT s FROM Sale s WHERE s.cash = :cash")})
 public class Sale implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,10 +46,9 @@ public class Sale implements Serializable {
     @Column(name = "DATE")
     @Temporal(TemporalType.DATE)
     private Date date;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "AMOUNT")
-    private float amount;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "CASH")
+    private Double cash;
     @JoinColumn(name = "STORE_ID", referencedColumnName = "STORE_ID")
     @ManyToOne(optional = false)
     private Store storeId;
@@ -64,10 +63,9 @@ public class Sale implements Serializable {
         this.saleId = saleId;
     }
 
-    public Sale(Integer saleId, Date date, float amount) {
+    public Sale(Integer saleId, Date date) {
         this.saleId = saleId;
         this.date = date;
-        this.amount = amount;
     }
 
     public Integer getSaleId() {
@@ -86,12 +84,12 @@ public class Sale implements Serializable {
         this.date = date;
     }
 
-    public float getAmount() {
-        return amount;
+    public Double getCash() {
+        return cash;
     }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public void setCash(Double cash) {
+        this.cash = cash;
     }
 
     public Store getStoreId() {

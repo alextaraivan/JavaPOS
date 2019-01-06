@@ -8,6 +8,7 @@ package Ejb;
 import PosClasses.UserDetails;
 import entity.User1;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -91,6 +92,14 @@ public class UserBean {
         user.setPhone(phone);
         user.setPosition(position);
         
+    }
+    
+     public void deleteUsersByIds(Collection<Integer> ids) {
+        LOG.info("deleteUsersByIds");
+        for (Integer id : ids) {
+            User1 user = em.find(User1.class, id);
+            em.remove(user);
+        }
     }
    
 }
