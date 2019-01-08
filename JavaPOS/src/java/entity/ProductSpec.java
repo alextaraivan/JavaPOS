@@ -6,15 +6,13 @@
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,75 +20,75 @@ import javax.persistence.Table;
  * @author Romelia Milascon
  */
 @Entity
-@Table(name = "SALES")
-public class Sale implements Serializable {
+@Table(name = "PRODUCTSPECS")
+public class ProductSpec implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    
-     private LocalDate saleDate;
-    
-    private LocalTime saleTime;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_KEY")
-    private User1 cashier;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STORE_KEY")
-    private Store store;
-    
-    private Double paymentAmount;
 
-    public Integer getId() {
+    private String description;
+    
+    private Double price;
+    
+    private Integer unitInStock;
+    
+    private String barcode;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_KEY")
+    private Product product;
+    
+
+     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public LocalDate getSaleDate() {
-        return saleDate;
+    
+    public String getDescription() {
+        return description;
     }
 
-    public void setSaleDate(LocalDate saleDate) {
-        this.saleDate = saleDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalTime getSaleTime() {
-        return saleTime;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setSaleTime(LocalTime saleTime) {
-        this.saleTime = saleTime;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public User1 getCashier() {
-        return cashier;
+    public Integer getUnitInStock() {
+        return unitInStock;
     }
 
-    public void setCashier(User1 cashier) {
-        this.cashier = cashier;
+    public void setUnitInStock(Integer unitInStock) {
+        this.unitInStock = unitInStock;
     }
 
-    public Store getStore() {
-        return store;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Double getPaymentAmount() {
-        return paymentAmount;
+    public String getBarcode() {
+        return barcode;
     }
 
-    public void setPaymentAmount(Double paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
+    
 
     @Override
     public int hashCode() {
@@ -102,10 +100,10 @@ public class Sale implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Sale)) {
+        if (!(object instanceof ProductSpec)) {
             return false;
         }
-        Sale other = (Sale) object;
+        ProductSpec other = (ProductSpec) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -114,7 +112,7 @@ public class Sale implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Sale[ id=" + id + " ]";
+        return "entity.ProductSpec[ id=" + id + " ]";
     }
     
 }

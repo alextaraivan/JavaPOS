@@ -30,7 +30,7 @@
             
             <p>Content POS casier</p>
              <div id="cashierPage"> 
-                <input type="button" onclick="location.href='${pageContext.request.contextPath}/NewSale';" value="New Sale" />
+                <input type="button" onclick="location.href='${pageContext.request.contextPath}/AddSale';" value="New Sale" />
                 <input type="button" onclick="location.href='${pageContext.request.contextPath}/NewReturn';" value="New Return" />
             </div>
           <% } %>

@@ -5,8 +5,11 @@
  */
 package Servlets;
 
-import Ejb.UserBean;
-import entity.User1;
+import Ejb.ProductBean;
+import Ejb.ProductSpecBean;
+import Ejb.TempBean;
+import PosClasses.ProductSpecDetails;
+import PosClasses.TempDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -21,12 +24,20 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Romelia Milascon
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "AddSale", urlPatterns = {"/AddSale"})
+public class AddSale extends HttpServlet {
+
+    @Inject
+    private ProductBean productBean;
     
     @Inject
-    private UserBean userBean;
-
+    private ProductSpecBean productSpecBean;
+    
+    @Inject
+    TempBean temporarBean;
+    
+    //List<ProductSpecDetails> productSpecList = new ArrayList<ProductSpecDetails>();
+ 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,10 +55,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
+            out.println("<title>Servlet AddSale</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddSale at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,39 +76,40 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
        
-       
-        request.getRequestDispatcher("/WEB-INF/Pages/LoginForm.jsp").forward(request, response);
-        
+        request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
     }
 
-   
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
         
-        String user = request.getParameter("user");
-        String pass=request.getParameter("userpass");
-         
-        List<User1> u=userBean.findUser(user,pass);
+        String barcode = request.getParameter("barCode");
+        ProductSpecDetails prodSpecDetails = productSpecBean.findByBarcode(barcode);
         
-         if (u.isEmpty() != true) {
-            request.getSession().setAttribute("user", user);
-            if(u.get(0).getPosition().equals("ADMIN"))
-                request.getSession().setAttribute("userRole","admin");
-            else
-            {
-                request.getSession().setAttribute("userRole","cashier");
-            }
-             request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
+        Integer quantity = 1;
+        if(temporarBean.findByName(prodSpecDetails.getProdName())!=null)
+            temporarBean.createTemp(prodSpecDetails.getProdName(), prodSpecDetails.getDescription(), prodSpecDetails.getPrice(),quantity);
+        else
+        {
+            Integer id=temporarBean.findByName(prodSpecDetails.getProdName()).getId();
+            Integer q=quantity+temporarBean.findByName(prodSpecDetails.getProdName()).getQuantity();
+            temporarBean.updateTemp(id,q);
         }
-        else {
-            //request.setAttribute("error", "Unknown user, please try again");
-            request.getRequestDispatcher("/WEB-INF/Pages/LoginForm.jsp").forward(request, response);
-        }
-            
+        
+        List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
+        Double total=temporarBean.getTotal();
+        request.setAttribute("temporarProducts", temporarProducts);
+        request.setAttribute("total", total);
+        request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
     }
 
     /**

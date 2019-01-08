@@ -5,11 +5,14 @@
  */
 package Servlets;
 
+import Ejb.SaleBean;
+import Ejb.StoreBean;
+import Ejb.TempBean;
 import Ejb.UserBean;
-import entity.User1;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,11 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Romelia Milascon
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
-    
-    @Inject
-    private UserBean userBean;
+@WebServlet(name = "FinishSale", urlPatterns = {"/FinishSale"})
+public class FinishSale extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,6 +36,20 @@ public class Login extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+     @Inject
+    UserBean userBean;
+     
+     @Inject
+    TempBean tempBean;
+     
+     @Inject
+    StoreBean storeBean;
+     
+     @Inject
+     SaleBean saleBean;
+     
+     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -44,10 +58,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
+            out.println("<title>Servlet FinishSale</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet FinishSale at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,39 +79,30 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-       
-       
-        request.getRequestDispatcher("/WEB-INF/Pages/LoginForm.jsp").forward(request, response);
+        String uid=(String)request.getSession().getAttribute("user"); 
+        Integer uId=userBean.findUserID(uid);
+        LocalDate saleD=LocalDate.now();
+        LocalTime saleT=LocalTime.now();
+        Double cash=tempBean.getTotal();
         
+        saleBean.createSale(saleD,saleT,uId,1,cash);
+        
+        
+         request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
     }
 
-   
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        
-        String user = request.getParameter("user");
-        String pass=request.getParameter("userpass");
-         
-        List<User1> u=userBean.findUser(user,pass);
-        
-         if (u.isEmpty() != true) {
-            request.getSession().setAttribute("user", user);
-            if(u.get(0).getPosition().equals("ADMIN"))
-                request.getSession().setAttribute("userRole","admin");
-            else
-            {
-                request.getSession().setAttribute("userRole","cashier");
-            }
-             request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
-        }
-        else {
-            //request.setAttribute("error", "Unknown user, please try again");
-            request.getRequestDispatcher("/WEB-INF/Pages/LoginForm.jsp").forward(request, response);
-        }
-            
+        processRequest(request, response);
     }
 
     /**

@@ -72,8 +72,8 @@ public class User1 implements Serializable {
     @Size(min = 1, max = 32)
     @Column(name = "POSITION")
     private String position;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cashierId")
-    private Collection<Sale> saleCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cashier")
+    private Collection<Sale> sales;
 
     public User1() {
     }
@@ -140,12 +140,12 @@ public class User1 implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Sale> getSaleCollection() {
-        return saleCollection;
+    public Collection<Sale> getSales() {
+        return sales;
     }
 
-    public void setSaleCollection(Collection<Sale> saleCollection) {
-        this.saleCollection = saleCollection;
+    public void setSales(Collection<Sale> sales) {
+        this.sales = sales;
     }
 
     @Override
