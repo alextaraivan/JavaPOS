@@ -32,7 +32,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Telefon</th>
                         <th scope="col">Tip</th>
-                        <th scope="col">Telefon</th>
+                        <th scope="col">Editare</th>
                       </tr>
                     </thead>
                     <tbody>

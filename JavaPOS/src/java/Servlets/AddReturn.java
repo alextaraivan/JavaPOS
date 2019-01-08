@@ -5,16 +5,13 @@
  */
 package Servlets;
 
+import Ejb.ProductBean;
 import Ejb.ProductSpecBean;
-import Ejb.SaleBean;
 import Ejb.TempBean;
-import Ejb.UserBean;
 import PosClasses.ProductSpecDetails;
 import PosClasses.TempDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -27,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Romelia Milascon
  */
-@WebServlet(name = "FinishSale", urlPatterns = {"/FinishSale"})
-public class FinishSale extends HttpServlet {
+@WebServlet(name = "AddReturn", urlPatterns = {"/AddReturn"})
+public class AddReturn extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,19 +36,15 @@ public class FinishSale extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+     @Inject
+    private ProductBean productBean;
     
-     @Inject
-    UserBean userBean;
-     
-     @Inject
-    TempBean tempBean;
-     
-     @Inject
-     SaleBean saleBean;
-     
-     @Inject
-     ProductSpecBean specBean;
-     
+    @Inject
+    private ProductSpecBean productSpecBean;
+    
+    @Inject
+    TempBean temporarBean;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -60,10 +53,10 @@ public class FinishSale extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FinishSale</title>");            
+            out.println("<title>Servlet AddReturn</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet FinishSale at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddReturn at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -82,34 +75,8 @@ public class FinishSale extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Double cash=tempBean.getTotal();
-        if(cash!=0)
-        {
-        String uid=(String)request.getSession().getAttribute("user"); 
-        Integer uId=userBean.findUserID(uid);
-        LocalDate saleD=LocalDate.now();
-        LocalTime saleT=LocalTime.now();
-        
-        saleBean.createSale(saleD,saleT,uId,1,cash);
-        
-        List<TempDetails> temporarProducts = tempBean.getAllTemporars();
-        for (TempDetails temp : temporarProducts) {
-            
-                Integer quant=temp.getQuantity();
-                
-                String name=temp.getProdName(); 
-                
-                ProductSpecDetails spec=specBean.findByProdName(name);
-                
-                Integer specId=spec.getId();
-                
-                Integer qInStock=spec.getUnitInStock()-quant;
-                
-                specBean.updateProductSpecification(specId, qInStock);
-            }
-        tempBean.deleteRecords();
-        }
-       request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
+        temporarBean.deleteRecords();
+        request.getRequestDispatcher("/WEB-INF/Pages/Return.jsp").forward(request, response);
     }
 
     /**
@@ -123,7 +90,56 @@ public class FinishSale extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+          String barcode = request.getParameter("barCode");
+          
+        ProductSpecDetails prodSpecDetails = productSpecBean.findByBarcode(barcode);
+        
+        if (prodSpecDetails == null){
+        
+            List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
+            request.setAttribute("temporarProducts", temporarProducts);
+            
+            Double total=temporarBean.getTotal();
+             request.setAttribute("total", total);
+            
+            request.getRequestDispatcher("/WEB-INF/Pages/Return.jsp").forward(request, response);
+        }
+        else
+        {
+          Integer quantity = Integer.parseInt(request.getParameter("quantity"));    
+        
+        TempDetails t=temporarBean.findByName(prodSpecDetails.getProdName());
+        if(quantity > prodSpecDetails.getUnitInStock())
+        {
+            List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
+            request.setAttribute("temporarProducts", temporarProducts);
+            
+            Double total=temporarBean.getTotal();
+             request.setAttribute("total", total);
+            
+            request.getRequestDispatcher("/WEB-INF/Pages/Return.jsp").forward(request, response);
+        }
+        else{ 
+        if(t!=null)
+        {
+            
+            Integer id=t.getId();
+            Integer q=quantity+t.getQuantity();
+            temporarBean.updateTemp(id,q);
+        }
+        else
+        {
+            temporarBean.createTemp(prodSpecDetails.getProdName(), prodSpecDetails.getDescription(), prodSpecDetails.getPrice(),quantity);
+        }
+        
+        List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
+        Double total=temporarBean.getTotal();
+        request.setAttribute("temporarProducts", temporarProducts);
+        request.setAttribute("total", total);
+        request.getRequestDispatcher("/WEB-INF/Pages/Return.jsp").forward(request, response);
+        }
+        }
     }
 
     /**

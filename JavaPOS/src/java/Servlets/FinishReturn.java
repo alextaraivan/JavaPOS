@@ -6,15 +6,11 @@
 package Servlets;
 
 import Ejb.ProductSpecBean;
-import Ejb.SaleBean;
 import Ejb.TempBean;
-import Ejb.UserBean;
 import PosClasses.ProductSpecDetails;
 import PosClasses.TempDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -27,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Romelia Milascon
  */
-@WebServlet(name = "FinishSale", urlPatterns = {"/FinishSale"})
-public class FinishSale extends HttpServlet {
+@WebServlet(name = "FinishReturn", urlPatterns = {"/FinishReturn"})
+public class FinishReturn extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,19 +35,12 @@ public class FinishSale extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-     @Inject
-    UserBean userBean;
      
      @Inject
     TempBean tempBean;
      
      @Inject
-     SaleBean saleBean;
-     
-     @Inject
      ProductSpecBean specBean;
-     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -60,10 +49,10 @@ public class FinishSale extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FinishSale</title>");            
+            out.println("<title>Servlet FinishReturn</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet FinishSale at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet FinishReturn at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -85,17 +74,11 @@ public class FinishSale extends HttpServlet {
         Double cash=tempBean.getTotal();
         if(cash!=0)
         {
-        String uid=(String)request.getSession().getAttribute("user"); 
-        Integer uId=userBean.findUserID(uid);
-        LocalDate saleD=LocalDate.now();
-        LocalTime saleT=LocalTime.now();
-        
-        saleBean.createSale(saleD,saleT,uId,1,cash);
         
         List<TempDetails> temporarProducts = tempBean.getAllTemporars();
         for (TempDetails temp : temporarProducts) {
             
-                Integer quant=temp.getQuantity();
+                Integer quant=temp.getQuantity(); 
                 
                 String name=temp.getProdName(); 
                 
@@ -103,7 +86,7 @@ public class FinishSale extends HttpServlet {
                 
                 Integer specId=spec.getId();
                 
-                Integer qInStock=spec.getUnitInStock()-quant;
+                Integer qInStock=spec.getUnitInStock()+quant;
                 
                 specBean.updateProductSpecification(specId, qInStock);
             }
