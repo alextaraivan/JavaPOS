@@ -6,12 +6,10 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -19,21 +17,35 @@ import javax.persistence.Table;
  * @author Romelia Milascon
  */
 @Entity
-@Table(name = "STORES")
-public class Store implements Serializable {
+@Table(name = "TEMP")
+public class Temp implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    private Integer id;
-    
-     private String name;
-    
-    private String address;
-    
-    private Collection<Sale> sales;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+     private String prodName;
+    
+    private String description;
+
+     private Double price;
+    
+    private Integer quantity;
+
+    public Temp() {
+    }
+    
+    public Temp(Integer id, String prodName, String description, Double price, Integer quantity) {
+        this.id = id;
+        this.prodName = prodName;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    
+    
     public Integer getId() {
         return id;
     }
@@ -42,33 +54,39 @@ public class Store implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProdName() {
+        return prodName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-     @OneToMany(mappedBy = "store")
-    public Collection<Sale> getSales() {
-        return sales;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setSales(Collection<Sale> sales) {
-        this.sales = sales;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
-    
-    
+ 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -79,10 +97,10 @@ public class Store implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Store)) {
+        if (!(object instanceof Temp)) {
             return false;
         }
-        Store other = (Store) object;
+        Temp other = (Temp) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -91,7 +109,7 @@ public class Store implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Store[ id=" + id + " ]";
+        return "entity.Temp[ id=" + id + " ]";
     }
     
 }

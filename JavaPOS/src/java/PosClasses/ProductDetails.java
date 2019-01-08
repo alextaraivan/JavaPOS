@@ -9,30 +9,33 @@ package PosClasses;
  *
  * @author Romelia Milascon
  */
-public class ProductDetails {
+public class ProductDetails implements java.io.Serializable{
     
-      private Long prodid;
-      private String prodname;
-      
-       public ProductDetails(Long prodid, String prodname) {
-        this.prodid = prodid;
-        this.prodname = prodname;
+     private Integer id;
+    
+    private String prodName;
+
+    public ProductDetails(Integer id, String prodName) {
+        this.id = id;
+        this.prodName = prodName;
     }
 
-    public Long getProdid() {
-        return prodid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setProdid(Long prodid) {
-        this.prodid = prodid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getProdname() {
-        return prodname;
+    public String getProdName() {
+        return prodName;
     }
 
-    public void setProdname(String prodname) {
-        this.prodname = prodname;
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
     }
+    
+    
        
 }

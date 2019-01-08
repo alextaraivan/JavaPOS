@@ -6,12 +6,11 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -19,56 +18,46 @@ import javax.persistence.Table;
  * @author Romelia Milascon
  */
 @Entity
-@Table(name = "STORES")
-public class Store implements Serializable {
+@Table(name = "PRODUCTS")
+public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     private Integer id;
-    
-     private String name;
-    
-    private String address;
-    
-    private Collection<Sale> sales;
 
+     private String prodName;
+    
+    private ProductSpec productSpec;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+     public void setId(Integer id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
+     
+    public String getProdName() {
+        return prodName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
     }
 
-    public String getAddress() {
-        return address;
+    @OneToOne(mappedBy = "product")
+    public ProductSpec getProductSpec() {
+        return productSpec;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setProductSpec(ProductSpec productSpec) {
+        this.productSpec = productSpec;
     }
 
-     @OneToMany(mappedBy = "store")
-    public Collection<Sale> getSales() {
-        return sales;
-    }
+   
 
-    public void setSales(Collection<Sale> sales) {
-        this.sales = sales;
-    }
-
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -79,10 +68,10 @@ public class Store implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Store)) {
+        if (!(object instanceof Product)) {
             return false;
         }
-        Store other = (Store) object;
+        Product other = (Product) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -91,7 +80,7 @@ public class Store implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Store[ id=" + id + " ]";
+        return "entity.Product[ id=" + id + " ]";
     }
     
 }

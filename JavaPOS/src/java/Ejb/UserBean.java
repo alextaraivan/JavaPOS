@@ -56,7 +56,14 @@ public class UserBean {
         User1 user = em.find(User1.class, userId);
         return new UserDetails(user.getId(),user.getUsername(), user.getEmail(), user.getPhone(),user.getPosition(),user.getPassword());
     }
-    
+    public Integer findUserID(String name)
+    {
+        Query  q=em.createNamedQuery("User1.findByUsername");
+                q.setParameter("username",name);
+        User1 u=(User1) q.getSingleResult();
+        
+        return u.getId();
+    }
     public List<UserDetails> getAllUsers() {
         LOG.info("getAllUsers");
         
