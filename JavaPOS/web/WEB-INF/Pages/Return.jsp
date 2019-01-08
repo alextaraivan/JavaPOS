@@ -1,6 +1,6 @@
 <%-- 
-    Document   : Sale
-    Created on : Jan 7, 2019, 6:04:47 PM
+    Document   : Return
+    Created on : Jan 8, 2019, 8:16:56 PM
     Author     : Romelia Milascon
 --%>
 
@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@include file="external.jsp" %>
-        <title>Sale</title>
+        <title>Return</title>
     </head>
     <body>
         <header>
@@ -19,7 +19,7 @@
         </header>
        
 
-     <form class="needs-validation float-right mr-5" method="POST" action="${pageContext.request.contextPath}/AddSale">
+     <form class="needs-validation float-right mr-5" method="POST" action="${pageContext.request.contextPath}/AddReturn">
         <div class="d-flex flex-column">
             <label class=" ml-3 display-4 p-2">BarCode</label>
             <input class=" pr-2 w-40" type="number" name="barCode" required><br>
@@ -58,9 +58,10 @@
        </tbody>
                 </table>
             <div id="buttonFinish">
-                <input  class="btn btn-success w-100 h-20" type="button" onclick="location.href='${pageContext.request.contextPath}/FinishSale';" value="Finish Sale" />
+                <input  class="btn btn-success w-100 h-20" type="button" onclick="location.href='${pageContext.request.contextPath}/FinishReturn';" value="Finish Return" />
             </div>
             
         
     </body>
 </html>
+

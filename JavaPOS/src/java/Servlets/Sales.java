@@ -5,16 +5,10 @@
  */
 package Servlets;
 
-import Ejb.ProductSpecBean;
 import Ejb.SaleBean;
-import Ejb.TempBean;
-import Ejb.UserBean;
-import PosClasses.ProductSpecDetails;
-import PosClasses.TempDetails;
+import PosClasses.SaleDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -27,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Romelia Milascon
  */
-@WebServlet(name = "FinishSale", urlPatterns = {"/FinishSale"})
-public class FinishSale extends HttpServlet {
+@WebServlet(name = "Sales", urlPatterns = {"/Sales"})
+public class Sales extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,19 +33,8 @@ public class FinishSale extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-     @Inject
-    UserBean userBean;
-     
-     @Inject
-    TempBean tempBean;
-     
-     @Inject
-     SaleBean saleBean;
-     
-     @Inject
-     ProductSpecBean specBean;
-     
+    @Inject
+    private SaleBean saleBean;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -60,10 +43,10 @@ public class FinishSale extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FinishSale</title>");            
+            out.println("<title>Servlet Sales</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet FinishSale at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Sales at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -82,34 +65,10 @@ public class FinishSale extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Double cash=tempBean.getTotal();
-        if(cash!=0)
-        {
-        String uid=(String)request.getSession().getAttribute("user"); 
-        Integer uId=userBean.findUserID(uid);
-        LocalDate saleD=LocalDate.now();
-        LocalTime saleT=LocalTime.now();
+         List<SaleDetails> sales = saleBean.getAllSales();
+        request.setAttribute("sales", sales);
         
-        saleBean.createSale(saleD,saleT,uId,1,cash);
-        
-        List<TempDetails> temporarProducts = tempBean.getAllTemporars();
-        for (TempDetails temp : temporarProducts) {
-            
-                Integer quant=temp.getQuantity();
-                
-                String name=temp.getProdName(); 
-                
-                ProductSpecDetails spec=specBean.findByProdName(name);
-                
-                Integer specId=spec.getId();
-                
-                Integer qInStock=spec.getUnitInStock()-quant;
-                
-                specBean.updateProductSpecification(specId, qInStock);
-            }
-        tempBean.deleteRecords();
-        }
-       request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/Pages/sales.jsp").forward(request, response);
     }
 
     /**

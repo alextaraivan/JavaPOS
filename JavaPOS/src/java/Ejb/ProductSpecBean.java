@@ -5,7 +5,6 @@
  */
 package Ejb;
 
-import PosClasses.ProductDetails;
 import PosClasses.ProductSpecDetails;
 import entity.Product;
 import entity.ProductSpec;
@@ -15,6 +14,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -90,9 +90,9 @@ public class ProductSpecBean {
                 productSpec.getBarcode());
     }
     
-    public ProductSpecDetails findByProdId(Integer productId) {
-         Query query = em.createQuery("SELECT ps FROM ProductSpec ps, Product p WHERE p.id = :productId")
-                .setParameter("productId", productId)
+    public ProductSpecDetails findByProdName(String productName) {
+         Query query = em.createQuery("SELECT ps FROM ProductSpec ps WHERE ps.product = (SELECT p FROM Product p WHERE p.prodName = :productName)")
+                .setParameter("productName", productName)
                 .setMaxResults(1);
         ProductSpec productSpec = (ProductSpec) query.getSingleResult();
         return new ProductSpecDetails(productSpec.getId(),
@@ -103,6 +103,7 @@ public class ProductSpecBean {
                 productSpec.getBarcode());
     }
     public ProductSpecDetails findByBarcode(String barcode) {
+        try{
         Query query = em.createQuery("SELECT ps FROM ProductSpec ps WHERE ps.barcode = :barcode")
                 .setParameter("barcode", barcode)
                 .setMaxResults(1);
@@ -113,6 +114,10 @@ public class ProductSpecBean {
                 productSpec.getUnitInStock(),
                 productSpec.getProduct().getProdName(),
                 productSpec.getBarcode());
+        }catch(NoResultException ex)
+        {
+            return null;
+        }
     }
     
 }

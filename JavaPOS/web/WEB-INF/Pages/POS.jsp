@@ -23,6 +23,7 @@
              <div id="adminPage"> 
                  <div class="w-25 p-3 mx-auto">
                     <input class="btn btn-primary btn-lg btn-block" type="button" onclick="location.href='${pageContext.request.contextPath}/Users'" value="Users" />
+                    <input class="btn btn-primary btn-lg btn-block" type="button" onclick="location.href='${pageContext.request.contextPath}/Sales'" value="Sales" />
                 </div>     
             </div>        
              <% } 
@@ -32,7 +33,7 @@
             <p class="display-4 d-flex justify-content-center">Alege tipul operatiunii</p>
             <div id="cashierPage" class="d-flex justify-content-center"> 
                 <input class="btn btn-primary w-25 mr-1" type="button" onclick="location.href='${pageContext.request.contextPath}/AddSale';" value="Vanzare Noua" />
-                <input class="btn btn-warning w-25" type="button" onclick="location.href='${pageContext.request.contextPath}/NewReturn';" value="Retur Nou" />
+                <input class="btn btn-warning w-25" type="button" onclick="location.href='${pageContext.request.contextPath}/AddReturn';" value="Retur Nou" />
             </div>
           <% } %>
         </div>

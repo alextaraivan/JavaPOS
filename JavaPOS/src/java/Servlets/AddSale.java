@@ -36,8 +36,6 @@ public class AddSale extends HttpServlet {
     @Inject
     TempBean temporarBean;
     
-    //List<ProductSpecDetails> productSpecList = new ArrayList<ProductSpecDetails>();
- 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -96,6 +94,18 @@ public class AddSale extends HttpServlet {
         String barcode = request.getParameter("barCode");
         ProductSpecDetails prodSpecDetails = productSpecBean.findByBarcode(barcode);
         
+        if (prodSpecDetails == null){
+        
+            List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
+            request.setAttribute("temporarProducts", temporarProducts);
+            
+            Double total=temporarBean.getTotal();
+             request.setAttribute("total", total);
+            
+            request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
+        }
+        else{
+        
         Integer quantity = Integer.parseInt(request.getParameter("quantity"));
         TempDetails t=temporarBean.findByName(prodSpecDetails.getProdName());
         if(quantity > prodSpecDetails.getUnitInStock())
@@ -127,6 +137,7 @@ public class AddSale extends HttpServlet {
         request.setAttribute("total", total);
         request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
         }
+       }
     }
 
     /**
