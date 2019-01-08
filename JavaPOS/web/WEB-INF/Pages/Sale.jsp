@@ -23,6 +23,7 @@
               <div class="mb-3">
                  BarCode:<br>
                  <input type="number" name="barCode" required><br>
+                 <input type="number" min="1"  class="form-control" name="quantity" id="quantity"  value="1">
                    <div class="invalid-feedback">
                        Please select a valid product.
                    </div>
@@ -44,7 +45,7 @@
                     ${tempProd.price} lei
                 </div>
                  <div class="col-md">
-                    ${tempProd.quantity}
+                    ${tempProd.quantity} buc
                 </div>
             </div>
         </c:forEach>
