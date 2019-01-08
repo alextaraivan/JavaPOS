@@ -16,38 +16,43 @@
         <%@include file="MeniuLogat.jsp" %>
     </head>
     <body>
-        <h1>Users</h1>
-    <% if (request.getSession().getAttribute("userRole").equals("admin")){ %>
-    
-      <form method="POST" action="${pageContext.request.contextPath}/Users">
-        <p>
-            <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Register" role="button">Add User</a>
-            <button class="btn btn-danger" type="submit">Delete users</button>
-        </p>
-
-    <% } %>
-    <c:forEach var="user" items="${users}" varStatus="status">
-        <div class="row">
-            <div class="col-md">
-            <input type="checkbox" class="form-check-input" name="user_ids" value="${user.id}" />
-            </div>
-            <div class="col-md-4">
-                ${user.username}
-            </div>
-            <div class="col-md-4">
-                ${user.email}
-            </div>
-             <div class="col-md-4">
-                ${user.phone}
-            </div>
-            <div class="col-md-4">
-                ${user.position}
-            </div>
-            <div class="col-md-2">
-              <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditUser?id=${user.id}" role="button">Edit User</a>
-            </div>
-        </div>
-    </c:forEach>
-    </form>
+       
+        <% if (request.getSession().getAttribute("userRole").equals("admin")){ %>
+            <form class="mx-auto w-75" method="POST" action="${pageContext.request.contextPath}/Users">
+                <p>
+                    <a class="btn btn-primary w-25" href="${pageContext.request.contextPath}/Register" role="button">Adauga Utilizator</a>
+                    <button class="btn btn-danger w-25" type="submit">Stergere Utilizator</button>
+                </p>
+        <% } %>
+                <table class="table table-striped table-dark mr-2">
+                    <thead>
+                      <tr>
+                        <th scope="col">Select</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Telefon</th>
+                        <th scope="col">Tip</th>
+                        <th scope="col">Telefon</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <c:forEach var="user" items="${users}" varStatus="status">
+                        <tr> 
+                            <td>
+                                <label class="container">
+                                    <input type="checkbox" name="user_ids" value="${user.id}">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                             <td>${user.username}</td>
+                             <td>${user.email}</td>
+                             <td>@${user.phone}</td>
+                             <td>${user.position}</td>
+                             <td><a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditUser?id=${user.id}" role="button">Editare</a></td>
+                        </tr>
+                      </c:forEach> 
+                    </tbody>
+                </table>
+            </form>
     </body>
 </html>

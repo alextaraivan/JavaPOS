@@ -96,14 +96,14 @@ public class AddSale extends HttpServlet {
         ProductSpecDetails prodSpecDetails = productSpecBean.findByBarcode(barcode);
         
         Integer quantity = 1;
-        if(temporarBean.findByName(prodSpecDetails.getProdName())!=null)
+        //if(temporarBean.findByName(prodSpecDetails.getProdName())!=null)
             temporarBean.createTemp(prodSpecDetails.getProdName(), prodSpecDetails.getDescription(), prodSpecDetails.getPrice(),quantity);
-        else
-        {
-            Integer id=temporarBean.findByName(prodSpecDetails.getProdName()).getId();
-            Integer q=quantity+temporarBean.findByName(prodSpecDetails.getProdName()).getQuantity();
-            temporarBean.updateTemp(id,q);
-        }
+//        else
+//        {
+//            Integer id=temporarBean.findByName(prodSpecDetails.getProdName()).getId();
+//            Integer q=quantity+temporarBean.findByName(prodSpecDetails.getProdName()).getQuantity();
+//            temporarBean.updateTemp(id,q);
+//        }
         
         List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
         Double total=temporarBean.getTotal();
