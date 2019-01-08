@@ -1,10 +1,10 @@
-<%-- 
+ <%--
     Document   : Register
     Created on : Dec 18, 2018, 4:17:58 PM
     Author     : Romelia Milascon
 --%>
 
-<<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
