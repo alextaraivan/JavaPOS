@@ -18,10 +18,12 @@
              <%@include file="MeniuLogat.jsp" %>
         </header>
        
+
      <form class="needs-validation float-right mr-5" method="POST" action="${pageContext.request.contextPath}/AddSale">
         <div class="d-flex flex-column">
             <label class=" ml-3 display-4 p-2">BarCode</label>
             <input class=" pr-2 w-40" type="number" name="barCode" required><br>
+            <input type="number" min="1"  class="form-control" name="quantity" id="quantity"  value="1">
             <div class="invalid-feedback">
                  Please select a valid product.
             </div>
@@ -31,23 +33,20 @@
                     out.print("Total: "+request.getAttribute("total"));
                 %> 
             </p>
-            <div id="buttonFinish">
-                <input  class="btn btn-success w-100 h-20" type="button" onclick="location.href='${pageContext.request.contextPath}/FinishSale';" value="Finish Sale" />
-            </div>
         </div>
      </form>   
-        <div id="receipt">
             <table class="table table-hover w-50 ml-5">
                  <thead>
-    <tr>
-      <th scope="col">Tip Produs</th>
-      <th scope="col">Detalii Produs</th>
-      <th scope="col">Pret</th>
-      <th scope="col">Cantitate</th>
-    </tr>
-  </thead>
-  <tbody>
+                    <tr>
+                      <th scope="col">Tip Produs</th>
+                      <th scope="col">Detalii Produs</th>
+                      <th scope="col">Pret</th>
+                      <th scope="col">Cantitate</th>
+                    </tr>
+                </thead>
+        <tbody>
             <c:forEach var="tempProd" items="${temporarProducts}" varStatus="status">
+            
                  <tr>
                     <td scope="row">${tempProd.prodName}</td>
                     <td> ${tempProd.description}</td>
@@ -56,8 +55,11 @@
                 </tr>
            
         </c:forEach>
-  </tbody>
+       </tbody>
                 </table>
+            <div id="buttonFinish">
+                <input  class="btn btn-success w-100 h-20" type="button" onclick="location.href='${pageContext.request.contextPath}/FinishSale';" value="Finish Sale" />
+            </div>
             
         
     </body>

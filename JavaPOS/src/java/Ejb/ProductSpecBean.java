@@ -5,6 +5,7 @@
  */
 package Ejb;
 
+import PosClasses.ProductDetails;
 import PosClasses.ProductSpecDetails;
 import entity.Product;
 import entity.ProductSpec;
@@ -46,18 +47,11 @@ public class ProductSpecBean {
         em.persist(productSpec);
     }
     
-    public void updateProductSpecification(Integer id, String description, Double price, Integer unitInStock, Integer productId, String barcode) {
-        LOG.info("updateProductSpecification");
+    public void updateProductSpecification(Integer id, Integer unitInStock) {
+        LOG.info("updateProductSpecQuantity");
         ProductSpec productSpec = em.find(ProductSpec.class, id);
-        productSpec.setDescription(description);
-        productSpec.setPrice(price);
         productSpec.setUnitInStock(unitInStock);
-        
-        Product product = em.find(Product.class, productId);
-        product.setProductSpec(productSpec);
-        productSpec.setProduct(product);
-        
-        productSpec.setBarcode(barcode);
+   
     }
       
     public List<ProductSpecDetails> getAllProductSpecs() {
@@ -96,6 +90,18 @@ public class ProductSpecBean {
                 productSpec.getBarcode());
     }
     
+    public ProductSpecDetails findByProdId(Integer productId) {
+         Query query = em.createQuery("SELECT ps FROM ProductSpec ps, Product p WHERE p.id = :productId")
+                .setParameter("productId", productId)
+                .setMaxResults(1);
+        ProductSpec productSpec = (ProductSpec) query.getSingleResult();
+        return new ProductSpecDetails(productSpec.getId(),
+                productSpec.getDescription(),
+                productSpec.getPrice(),
+                productSpec.getUnitInStock(),
+                productSpec.getProduct().getProdName(),
+                productSpec.getBarcode());
+    }
     public ProductSpecDetails findByBarcode(String barcode) {
         Query query = em.createQuery("SELECT ps FROM ProductSpec ps WHERE ps.barcode = :barcode")
                 .setParameter("barcode", barcode)
@@ -108,4 +114,5 @@ public class ProductSpecBean {
                 productSpec.getProduct().getProdName(),
                 productSpec.getBarcode());
     }
+    
 }

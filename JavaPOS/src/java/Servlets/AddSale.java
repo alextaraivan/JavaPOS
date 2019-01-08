@@ -77,6 +77,7 @@ public class AddSale extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
+        temporarBean.deleteRecords();
         request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
     }
 
@@ -95,21 +96,37 @@ public class AddSale extends HttpServlet {
         String barcode = request.getParameter("barCode");
         ProductSpecDetails prodSpecDetails = productSpecBean.findByBarcode(barcode);
         
-        Integer quantity = 1;
-        //if(temporarBean.findByName(prodSpecDetails.getProdName())!=null)
+        Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+        TempDetails t=temporarBean.findByName(prodSpecDetails.getProdName());
+        if(quantity > prodSpecDetails.getUnitInStock())
+        {
+            List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
+            request.setAttribute("temporarProducts", temporarProducts);
+            
+            Double total=temporarBean.getTotal();
+             request.setAttribute("total", total);
+            
+            request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
+        }
+        else{ 
+        if(t!=null)
+        {
+            
+            Integer id=t.getId();
+            Integer q=quantity+t.getQuantity();
+            temporarBean.updateTemp(id,q);
+        }
+        else
+        {
             temporarBean.createTemp(prodSpecDetails.getProdName(), prodSpecDetails.getDescription(), prodSpecDetails.getPrice(),quantity);
-//        else
-//        {
-//            Integer id=temporarBean.findByName(prodSpecDetails.getProdName()).getId();
-//            Integer q=quantity+temporarBean.findByName(prodSpecDetails.getProdName()).getQuantity();
-//            temporarBean.updateTemp(id,q);
-//        }
+        }
         
         List<TempDetails> temporarProducts = temporarBean.getAllTemporars();
         Double total=temporarBean.getTotal();
         request.setAttribute("temporarProducts", temporarProducts);
         request.setAttribute("total", total);
         request.getRequestDispatcher("/WEB-INF/Pages/Sale.jsp").forward(request, response);
+        }
     }
 
     /**

@@ -74,7 +74,7 @@ public class TempBean {
          LOG.info("getPriceSum");
          
           try {
-            Query query = em.createQuery("SELECT sum(t.price) FROM Temp t");
+            Query query = em.createQuery("SELECT sum(t.price*t.quantity) FROM Temp t");
             Double sum = (Double) query.getSingleResult();
             return sum;
         } catch (Exception ex) {
@@ -106,8 +106,8 @@ public class TempBean {
         
          LOG.info("getTempProdByName");
          try{
-        Query query = em.createQuery("SELECT t FROM Temp t WHERE t.prodName = :prodName")
-                .setParameter("prodName", productName)
+        Query query = em.createQuery("SELECT t FROM Temp t WHERE t.prodName = :productName")
+                .setParameter("productName", productName)
                 .setMaxResults(1);
         Temp temp = (Temp) query.getSingleResult();
         return new TempDetails(temp.getId(), temp.getProdName(),temp.getDescription(),temp.getPrice(),temp.getQuantity());
@@ -115,5 +115,12 @@ public class TempBean {
          {
              return null;
          }
+    }
+    
+    public void deleteRecords()
+    {
+        LOG.info("deleteRecords");
+        Query del=em.createQuery("DELETE FROM Temp t");
+        del.executeUpdate();
     }
 }

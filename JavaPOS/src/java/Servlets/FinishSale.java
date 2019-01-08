@@ -5,14 +5,20 @@
  */
 package Servlets;
 
+import Ejb.ProductBean;
+import Ejb.ProductSpecBean;
 import Ejb.SaleBean;
 import Ejb.StoreBean;
 import Ejb.TempBean;
 import Ejb.UserBean;
+import PosClasses.ProductDetails;
+import PosClasses.ProductSpecDetails;
+import PosClasses.TempDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,6 +55,11 @@ public class FinishSale extends HttpServlet {
      @Inject
      SaleBean saleBean;
      
+     @Inject
+     ProductBean prodBean;
+     
+     @Inject
+     ProductSpecBean specBean;
      
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -79,16 +90,39 @@ public class FinishSale extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        Double cash=tempBean.getTotal();
+        if(cash!=0)
+        {
         String uid=(String)request.getSession().getAttribute("user"); 
         Integer uId=userBean.findUserID(uid);
         LocalDate saleD=LocalDate.now();
         LocalTime saleT=LocalTime.now();
-        Double cash=tempBean.getTotal();
         
         saleBean.createSale(saleD,saleT,uId,1,cash);
         
-        
-         request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
+        List<TempDetails> temporarProducts = tempBean.getAllTemporars();
+        for (TempDetails temp : temporarProducts) {
+            
+                Integer quant=temp.getQuantity(); //cantitate prod cumparata
+                
+                String name=temp.getProdName(); // nume produs
+                
+                ProductDetails prod=prodBean.findByName(name);
+                
+                Integer prodId=prod.getId();
+                
+                ProductSpecDetails spec=specBean.findByProdId(prodId);
+                
+                Integer specId=spec.getId();
+                
+                Integer qInStock=spec.getUnitInStock()-quant;
+                
+                specBean.updateProductSpecification(specId, qInStock);
+            }
+        tempBean.deleteRecords();
+        }
+       request.getRequestDispatcher("/WEB-INF/Pages/POS.jsp").forward(request, response);
     }
 
     /**
