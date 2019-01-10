@@ -12,7 +12,7 @@ package PosClasses;
 public class StoreDetails {
     
      private Integer id;
-    
+
     private String name;
     
     private String address;

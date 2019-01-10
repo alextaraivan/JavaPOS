@@ -27,12 +27,22 @@
             <div class="invalid-feedback">
                  Please select a valid product.
             </div>
-            <button class="btn btn-primary " type="submit">Add Item</button>       
+            <button class="btn btn-primary mt-4" type="submit">Add Item</button>       
             <p class="total">
-                <%   
-                    out.print("Total: "+request.getAttribute("total")+" lei");
+                <%  
+                    if(request.getAttribute("total")==null)
+                    {
+                        out.print("Total: 0 lei");
+                    }
+                    else
+                    {
+                        out.print("Total: "+request.getAttribute("total")+" lei");
+                    }
                 %> 
             </p>
+            <div id="buttonFinish">
+                <input  class="btn btn-success w-100 h-20" type="button" onclick="location.href='${pageContext.request.contextPath}/FinishSale';" value="Finish Sale" />
+            </div>
         </div>
      </form>   
             <table class="table table-hover w-50 ml-5">
@@ -57,10 +67,5 @@
         </c:forEach>
        </tbody>
                 </table>
-            <div id="buttonFinish">
-                <input  class="btn btn-success w-100 h-20" type="button" onclick="location.href='${pageContext.request.contextPath}/FinishSale';" value="Finish Sale" />
-            </div>
-            
-        
     </body>
 </html>
